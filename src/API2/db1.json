@@ -1,0 +1,22 @@
+{
+  "details": [
+    {
+      "name": "name",
+      "username": "username",
+      "rollno": "rollno",
+      "gmail": "gmail",
+      "password": "password",
+      "confirmPassword": "confirmPassword",
+      "id": "f1eb"
+    },
+    {
+      "id": "f6d4",
+      "name": "RAJESH MASADA",
+      "username": "rajesh143",
+      "gmail": "21221A0571@gmail.com",
+      "rollno": "21221A0571",
+      "password": "rajesh123",
+      "confirmPassword": "rajesh123"
+    }
+  ]
+}
