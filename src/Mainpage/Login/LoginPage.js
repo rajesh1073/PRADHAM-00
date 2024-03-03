@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './login.css'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -14,17 +15,30 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Here you can implement your login logic, such as sending a request to your backend server
-    console.log('Username:', username);
-    console.log('Password:', password);
-  };
+  const handleAddItem = async () => {
+    try {
+      // Send a POST request to the JSON server
+      await axios.post('http://localhost:3800/details', { //use your api here guys
+        username : username,
+        password : password
+      });
 
+      // Optionally, you can fetch the updated data to reflect changes
+      // For example:
+      // const response = await axios.get('http://localhost:3001/items');
+      // console.log(response.data);
+
+      // Reset the input field
+      setUsername('');
+      setPassword('');
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
+  };
   return (
     <div className='container'>
       
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleAddItem}>
         <div>
         <h2>Login</h2>
           <label>Username:</label>
