@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './register.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
@@ -24,19 +25,51 @@ function RegistrationPage() {
       ...formData,
       [name]: value
     });
-  };
-
-  const handleSubmit = (e) => {
+  };const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validateForm(formData);
+  
     if (Object.keys(validationErrors).length === 0) {
-      // Form submission logic goes here
-      console.log('Form submitted successfully:', formData);
+      // No validation errors, proceed with form submission
+      handleAddItem();
     } else {
+      // Update the state with validation errors
       setErrors(validationErrors);
     }
   };
-
+  
+  const handleAddItem = async () => {
+    try {
+      // Send a POST request to the JSON server
+      await axios.post('http://localhost:3900/details', {
+        name : formData.name,
+        username: formData.username,
+        gmail: formData.gmail,
+        rollno: formData.rollno,
+        password: formData.password,
+        confirmPassword : formData.confirmPassword
+      });
+  
+      // Optionally, you can fetch the updated data to reflect changes
+      // For example:
+      // const response = await axios.get('http://localhost:3900/details');
+      // console.log(response.data);
+  
+      // Reset the input field
+      setFormData({
+        username: '',
+        name: '',
+        gmail: '',
+        rollno: '',
+        password: '',
+        confirmPassword: ''
+      });
+  
+      // Optionally, you can handle other state changes or actions after successful registration
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
+  };
   const validateForm = (data) => {
     let errors = {};
 
@@ -76,14 +109,16 @@ function RegistrationPage() {
     {
       errors.confirmPassword = 'Passwords do not match';
     }
-    
-
     return errors;
   };
   const isValidEmail = (rollno, email) => {
     const rollNumberSuffix = rollno + '@gmail.com';
     return email === rollNumberSuffix;
   };
+  
+  
+
+
   return (
     <div className='container'>
       
@@ -97,8 +132,10 @@ function RegistrationPage() {
             name="name"
             value={formData.name}
             onChange={handleChange}
+            required // Mark the field as required
+
           />
-          {errors.name && <span>{errors.name}</span>}
+          {errors.name && <span className='errormessage'>{errors.name}</span>}
         </div>
         <div>
           <label>Username:</label>
@@ -107,8 +144,10 @@ function RegistrationPage() {
             name="username"
             value={formData.username}
             onChange={handleChange}
+            required // Mark the field as required
+
           />
-          {errors.username && <span>{errors.username}</span>}
+          {errors.username && <span className='errormessage'>{errors.username}</span>}
         </div>
         
         <div>
@@ -118,8 +157,10 @@ function RegistrationPage() {
             name="rollno"
             value={formData.rollno}
             onChange={handleChange}
+            required // Mark the field as required
+
           />
-          {errors.rollno && <span>{errors.rollno}</span>}
+          {errors.rollno && <span className='errormessage'>{errors.rollno}</span>}
         </div>
         <div>
           <label>Gmail:</label>
@@ -128,18 +169,22 @@ function RegistrationPage() {
             name="gmail"
             value={formData.gmail}
             onChange={handleChange}
+            required // Mark the field as required
+
           />
-          {errors.gmail && <span>{errors.gmail}</span>}
+          {errors.gmail && <span className='errormessage'>{errors.gmail}</span>}
         </div>
         <div>
-          <label>Password:</label>
+          <label id='pass'>Password:</label>
           <input
             type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
+            required // Mark the field as required
+
           />
-          {errors.password && <span>{errors.password}</span>}
+          {errors.password && <span className='errormessage'>{errors.password}</span>}
         </div>
         <div>
           <label>Confirm Password:</label>
@@ -148,15 +193,17 @@ function RegistrationPage() {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
+            required // Mark the field as required
+
           />
-          {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+          {errors.confirmPassword && <span className='errormessage'>{errors.confirmPassword}</span>}
         </div>
         <button type="submit" onClick={fired}>Register</button>
         <div className='raj'>
-          <h4>
+          <h6>
                Have already an account?
-          </h4>
-          <Link to='/'>Login here</Link>
+          </h6>
+          <h6><Link to='/'>Login here</Link></h6>
         </div>
       </form>
     </div>
